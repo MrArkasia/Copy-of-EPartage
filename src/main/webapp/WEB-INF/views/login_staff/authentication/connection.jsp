@@ -5,5 +5,10 @@
 <tiles:insertDefinition name="masterAdmin.page">
 	<tiles:putAttribute name="title">Authentification</tiles:putAttribute>
 	<tiles:putAttribute name="content">
+	<c:if test="${not empty type}">
+			<p>
+				<c:out value="${message}" />
+			</p>
+		</c:if>
 	</tiles:putAttribute>
 </tiles:insertDefinition>

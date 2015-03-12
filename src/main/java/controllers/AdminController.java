@@ -44,49 +44,7 @@ public class AdminController {
 
 	// Connection ------------------------------------------------------------------
 
-		@RequestMapping(value = "/connection")
-		public ModelAndView connection(Model model) {
-			System.out.println("Controller : /AdminController --- Action : /connection");
-			Admin admin = new Admin();
-			ModelAndView result;
-			result = new ModelAndView("login_staff/connection");
-			model.addAttribute("admin", admin);
-			return result;
-		}
 		
-		/**
-		 * Admin connection
-		 */
-		@RequestMapping(value = "/login")
-		public ModelAndView login (
-				@RequestParam(required = true) String login,
-				@RequestParam(required = true) String password, 
-				HttpSession session,
-				Model model) {
-			System.out.println("Controller : /AdminController --- Action : /login");
-			
-			password = CryptPassword.getCryptString(password);
-			
-			Admin admin = adminService.findByLogin(login, password);
-			
-			if(admin != null){
-				session.setAttribute( "adminSession", admin );
-			} else {
-				session.setAttribute( "adminSession", null );
-			}
-			model.addAttribute("admin", admin);
-			return new ModelAndView("login_staff/index");
-		}
-
-		
-		/**
-		 * Admin logout
-		 */
-		@RequestMapping(value = "/logout")
-		public ModelAndView logoutForm (HttpSession session) {
-			session.invalidate();
-			return new ModelAndView("login_staff/index");
-		}
 		
 		// List waiting ------------------------------------------------------------------
 		
