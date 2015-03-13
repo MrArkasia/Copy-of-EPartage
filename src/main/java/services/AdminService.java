@@ -41,4 +41,8 @@ public class AdminService {
 		return adminDao.findByStatus(status);
 	}
 	
+	public void validateUser(Integer id) {
+		adminDao.validateUser(id, Status.A);
+	}
+	
 }

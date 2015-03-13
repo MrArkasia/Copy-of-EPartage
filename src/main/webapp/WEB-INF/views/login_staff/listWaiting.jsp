@@ -10,10 +10,16 @@
 				<c:when test="${not empty listStudents}">
 					<h1>1/ Liste des personne en attente de validation.</h1>
 					<ul>
+
+
 						<c:forEach var="student" items="${listStudents}">
-							<li>
-								<c:out value="${student.firstName}" /> 
-								<c:out value="${student.lastName}" />
+							<li><form:form method="POST"
+									modelAttribute="admin"
+									action="${pageContext.request.contextPath}/login_staff/waitingUsers/validateUser.htm?id=${student.id}">
+									<c:out value="${student.firstName}" />
+									<c:out value="${student.lastName}" />
+									<input id="connection" type="submit" value="Valider">
+								</form:form>
 							</li>
 						</c:forEach>
 					</ul>

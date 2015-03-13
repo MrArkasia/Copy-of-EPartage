@@ -10,7 +10,7 @@
 		
 		<c:if test="${!empty sessionScope.adminSession}">
 			<p>Vous êtes connecté(e) en tant qu'administrateur</p>
-			<a href="${pageContext.request.contextPath}/login_staff/listWaiting.htm">Voir les utilisateurs en attente</a>
+			<a href="${pageContext.request.contextPath}/login_staff/waitingUsers/listWaiting.htm">Voir les utilisateurs en attente</a>
 		</c:if>
 	</tiles:putAttribute>
 </tiles:insertDefinition>

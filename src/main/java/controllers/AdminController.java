@@ -41,28 +41,6 @@ public class AdminController {
 		result = new ModelAndView("login_staff/index");
 		return result;
 	}
-
-	// Connection ------------------------------------------------------------------
-
 		
-		
-		// List waiting ------------------------------------------------------------------
-		
-		@RequestMapping(value = "/listWaiting")
-		public ModelAndView login (
-				HttpSession session,
-				Model model) {
-		
-			System.out.println("Controller : /AdminController --- Action : /listWaiting");
-			
-			Map<String, List<Student>> mapStudents = new HashMap<String, List<Student>>();
-			
-			List <Student> listStudents = adminService.findByStatus(Status.W);
-			
-			mapStudents.put("listStudents", listStudents);
-			
-			model.addAttribute("admin", session.getAttribute("adminSession"));
-			return new ModelAndView("login_staff/listWaiting", mapStudents);
-		}
 			
 }
