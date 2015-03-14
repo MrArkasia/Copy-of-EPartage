@@ -8,76 +8,76 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.UserService;
 import utilities.CryptPassword;
-import domain.Status;
 import domain.Student;
+
 
 /**
  * Class managing connection page's actions
  * 
- * @author
+ * @author 
  */
 @Controller
 @RequestMapping("/authentication")
 public class AuthenticationController {
 
+	
+
 	@Autowired
 	UserService userService;
-
+	
 	// Constructors -----------------------------------------------------------
 
 	public AuthenticationController() {
 		super();
 	}
 
-	// Connection
-	// ------------------------------------------------------------------
+	// Connection ------------------------------------------------------------------
 
 	@RequestMapping(value = "/connection")
 	public ModelAndView connection(Model model) {
-		System.out
-				.println("Controller : /AuthenticationController --- Action : /connection");
+		System.out.println("Controller : /AuthenticationController --- Action : /connection");
 		Student student = new Student();
 		ModelAndView result;
 		result = new ModelAndView("authentication/connection");
 		model.addAttribute("student", student);
 		return result;
 	}
-
+	
 	/**
 	 * User connection
 	 */
 	@RequestMapping(value = "/login")
-	public ModelAndView login(@RequestParam(required = true) String email,
-			@RequestParam(required = true) String password,
-			HttpSession session, Model model) {
-		System.out
-				.println("Controller : /AuthenticationController --- Action : /login");
-
+	public ModelAndView login (
+			@RequestParam(required = true) String email,
+			@RequestParam(required = true) String password, 
+			HttpSession session,
+			Model model) {
+		System.out.println("Controller : /AuthenticationController --- Action : /login");
+		
 		password = CryptPassword.getCryptString(password);
 		Map<String, Object> message = new HashMap<String, Object>();
 		Student studentSession = userService.findByEmailPass(email, password);
-		ModelAndView result;
-		result = new ModelAndView("authentication/connection");
-		if (studentSession != null && studentSession.getStatus().equals(Status.A)) {
-				session.setAttribute("userSession", studentSession);
+		if(studentSession != null){
+			if(!studentSession.getStatus().equals("Waiting")){
+				session.setAttribute( "userSession", studentSession );
+			}
 		} else {
-//			session.setAttribute("userSession", null);
+			session.setAttribute( "userSession", null );
 			message.put("type", "error");
-			message.put("message",
-					"Le login ou le mot de passe n'est pas correct.");
-			Student student = new Student();
+	    	message.put("message", "Le login ou le mot de passe n'est pas correct.");
+	    	Student student = new Student();
+			ModelAndView result;
 			result = new ModelAndView("authentication/connection", message);
 			model.addAttribute("student", student);
 			return result;
 		}
-
+	
 		System.out.println(studentSession.getFirstName());
 		return new ModelAndView("welcome/index");
 	}
@@ -86,7 +86,7 @@ public class AuthenticationController {
 	 * User logout
 	 */
 	@RequestMapping(value = "/logout")
-	public ModelAndView logoutForm(HttpSession session) {
+	public ModelAndView logoutForm (HttpSession session) {
 		session.invalidate();
 		return new ModelAndView("welcome/index");
 	}

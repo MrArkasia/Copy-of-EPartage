@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.AdminService;
+import utilities.MailSender;
 import domain.Status;
 import domain.Student;
 
@@ -24,37 +25,39 @@ public class AdminWaitingUsersController {
 	@Autowired
 	AdminService adminService;
 
-	// Constructors -----------------------------------------------------------
+// Constructors ---------------------------------------------------------------
 
 	public AdminWaitingUsersController() {
 		super();
 	}
 
-	// List waiting
-	// ------------------------------------------------------------------
+// List waiting ---------------------------------------------------------------
 
 	@RequestMapping(value = "/listWaiting")
 	public ModelAndView listWaiting(HttpSession session, Model model) {
-
-		System.out
-				.println("Controller : /AdminController --- Action : /listWaiting");
-
+		System.out.println("Controller : /AdminController --- Action : /listWaiting");
 		Map<String, List<Student>> mapStudents = new HashMap<String, List<Student>>();
-
 		List<Student> listStudents = adminService.findByStatus(Status.W);
-
 		mapStudents.put("listStudents", listStudents);
-
 		model.addAttribute("admin", session.getAttribute("adminSession"));
 		return new ModelAndView("login_staff/listWaiting", mapStudents);
 	}
 	
 	@RequestMapping(value = "/validateUser")
-	public ModelAndView validateUsers(@RequestParam(value="id") Integer id , HttpSession session, Model model) {
-		System.out.println("coucou");
+	public ModelAndView validateUsers(@RequestParam(value="id") Integer id , 
+			@RequestParam String action, HttpSession session, Model model) {
 		System.out.println(id);
 		model.addAttribute("admin", session.getAttribute("adminSession"));
-		adminService.validateUser(id);
+		Student student = adminService.findStudentById(id);
+		if (action.equals("Valider")) {
+			adminService.validateUser(student.getId());
+			MailSender.sendEmail(student.getEmail(), "Validation de l'inscription", 
+					"Votre compte a bien été activé sur le site E-Partage. "
+					+ "Vous pouvez dès à présent vous connecter.");
+		} else {
+			adminService.refusedUser(student.getId());
+		}
 		return new ModelAndView("login_staff/listWaiting");
 	}
+	
 }

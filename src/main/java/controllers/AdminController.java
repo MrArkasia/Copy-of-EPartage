@@ -1,23 +1,11 @@
 package controllers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.AdminService;
-import utilities.CryptPassword;
-import domain.Admin;
-import domain.Status;
-import domain.Student;
 
 @Controller
 @RequestMapping("/login_staff")
@@ -26,13 +14,13 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
-	// Constructors -----------------------------------------------------------
+// Constructors ---------------------------------------------------------------
 
 	public AdminController() {
 		super();
 	}
 
-	// Index 
+// Index ----------------------------------------------------------------------
 	
 	@RequestMapping(value = "/index")
 	public ModelAndView index() {
@@ -41,6 +29,5 @@ public class AdminController {
 		result = new ModelAndView("login_staff/index");
 		return result;
 	}
-		
-			
+					
 }

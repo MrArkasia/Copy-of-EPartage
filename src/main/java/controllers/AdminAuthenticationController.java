@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import domain.Admin;
-import domain.Student;
 import services.AdminService;
 import utilities.CryptPassword;
+import domain.Admin;
 
 @Controller
 @RequestMapping("/login_staff/authentication")
@@ -52,9 +51,12 @@ public class AdminAuthenticationController {
 		System.out.println("Controller : /AdminController --- Action : /login");
 		
 		Map<String, Object> message = new HashMap<String, Object>();
-		Admin adminSession = adminService.findByLogin(login, password);
+
 		ModelAndView result = new ModelAndView ("login_staff/index");
 		
+		password = CryptPassword.getCryptString(password);
+
+		Admin adminSession = adminService.findByLogin(login, password);
 		
 		if(adminSession != null){
 			session.setAttribute( "adminSession", adminSession );
@@ -78,8 +80,11 @@ public class AdminAuthenticationController {
 	 * Admin logout
 	 */
 	@RequestMapping(value = "/logout")
-	public ModelAndView logoutForm (HttpSession session) {
+	public ModelAndView logoutForm (HttpSession session, Model model) {
 		session.invalidate();
+		
+		Admin admin = new Admin();
+		model.addAttribute("admin", admin);
 		return new ModelAndView("login_staff/index");
 	}
 }
